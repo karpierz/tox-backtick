@@ -1,0 +1,271 @@
+# Copyright (c) 2020-2024 Adam Karpierz
+# Licensed under the zlib/libpng License
+# https://opensource.org/licenses/Zlib
+
+[build-system]
+build-backend = 'setuptools.build_meta'
+requires = ['setuptools>=68.2.2', 'wheel>=0.42.0', 'packaging>=23.2.0', 'tox>=4.11.3']
+
+[project]
+name        = 'tox-backtick'
+version     = '0.4.0'
+description = 'Backticks tox plugin for tox v.4.x.x.'
+urls.Homepage      = 'https://pypi.org/project/tox-backtick/'
+urls.Documentation = 'https://tox-backtick.readthedocs.io/'
+urls.Download      = 'https://pypi.org/project/tox-backtick/'
+urls.Source        = 'https://github.com/karpierz/tox-backtick'
+urls.Issues        = 'https://github.com/karpierz/tox-backtick/issues'
+license = { text = 'LGPL-2.1-or-later License ; https://opensource.org/license/lgpl-2-1' }
+authors = [
+    { name  = 'Damien Nadé, Adam Karpierz' },
+    { email = 'adam@karpierz.net' },
+]
+maintainers = [
+    { name  = 'Adam Karpierz' },
+    { email = 'adam@karpierz.net' },
+]
+keywords = ['tox', 'backtick', 'backtocks', 'backticks', 'backquotes']
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
+    'Operating System :: OS Independent',
+    'Natural Language :: Polish',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: Implementation :: CPython',
+    'Programming Language :: Python :: Implementation :: PyPy',
+    'Topic :: Software Development :: Quality Assurance',
+    'Topic :: Software Development :: Testing',
+    'Environment :: Console',
+    'Framework :: tox',
+]
+requires-python = '>=3.8.1,<4.0.0'
+dependencies = [
+    # mandatory
+    'setuptools>=68.2.2',
+    'pkg_about>=1.1.1',
+    # others
+    'tox>=4.4.0',
+]
+dynamic = ['readme']
+[project.optional-dependencies]
+doc = [
+    'Sphinx>=7.1.2',
+    'sphinx-toolbox>=3.5.0',
+    'sphinx-tabs>=3.4.1',
+    'sphinx-copybutton>=0.5.1',
+    'sphinxcontrib-spelling>=7.7.0',
+    'sphinx-lint>=0.6.7',
+    'restructuredtext-lint>=1.4.0',
+    'nbsphinx>=0.8.10',
+]
+test = [
+    'deepdiff>=6.7.1',
+    'rich>=13.7.0',
+]
+
+[project.scripts]
+#'pkg_about' = 'pkg_about.__main__:main'
+
+[project.gui-scripts]
+#'pkg_about-gui' = 'pkg_about:main_gui'
+
+[project.entry-points.'tox']
+backtick = 'tox_backtick'
+
+[tool.setuptools.dynamic]
+readme = { file = ['README.rst', 'CHANGES.rst'], content-type = 'text/x-rst; charset=UTF-8' }
+
+[tool.setuptools]
+license-files = ['LICENSE']
+include-package-data = true
+platforms = ['any']
+zip-safe = true
+
+[tool.setuptools.packages.find]
+namespaces = false
+where = ['src']
+
+[tool.setuptools.package-dir]
+'' = 'src'
+#'tox_backtick.tests' = 'tests'
+
+[tool.setuptools.package-data]
+tox_backtick = [
+]
+
+[tool.coverage.run]
+source = [
+    'tox_backtick',
+    'tests',
+]
+omit = [
+]
+data_file = '.tox/coverage/.coverage'
+plugins = ['covdefaults']
+
+[tool.coverage.report]
+exclude_lines = [
+    # Regexes
+    # Have to re-enable the standard pragma
+    '^\s*if\s+self\.debug\s*:',
+    '^\s*if\s+__debug__\s*:',
+    '^\s*if\s+(0|False)\s*:',
+    '''if\s+__name__.*\s*==\s*['"]__main__['"]\s*:''',
+    '^\s*@unittest\.skip\(',
+    '^\s*@unittest\.skipIf\(sys\.platform\.startswith\("win"\)',
+]
+omit = [
+    'tests/run.py',
+]
+skip_covered = false
+
+[tool.coverage.html]
+directory = '.tox/coverage/.coverage.html'
+
+[tool.flake8]
+filename = ['*.py','*.pyx']
+#include = ['tests']
+#exclude = ['.tox','*.egg','.git','__pycache__','build','_build','docs/_build','dist']
+max-line-length = 99
+ignore = ['E126','E203','E221','E251','E302','E701','E702','E731',
+          'E122','E127','E128','E222','E272','E241','E266','E226','E704',
+          'D100','D101','D102','D103','D104','D400','D401','D202',
+          'N806','N802','N803','N801',
+          'I100','W503']
+# (e.g. 'E4','W') default: 'E121','E123','126','226','E24','704'
+#select =
+#select = ['E','W','F','N','I']
+output-file = '.tox/lint/flake8out.txt'
+count = true
+#show-pep8,
+#show-source
+#verbose
+#quiet
+
+#
+# Configuration(s) for tox
+#
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py{38,39,310,311,312}, pypy{39,310}win, docs
+labels =
+    py = py{38,39,310,311,312}, pypy{39,310}win
+    prepare = prepare
+    coverage = coverage
+    lint = lint
+    docs = docs
+    build  = py{38,39,310,311,312}, pypy{39,310}win, docs, build
+    deploy = py{38,39,310,311,312}, pypy{39,310}win, docs, build, publish
+minversion = 4.11.3
+skip_missing_interpreters = true
+requires =
+    {[base]deps}
+    virtualenv>=20.25.0
+    tox-tags>=0.2.0
+
+[base]
+basepython = python3.11
+deps =
+    pip>=23.3.2
+    setuptools>=68.2.2
+    wheel>=0.42.0
+packagesubdir = tox_backtick
+
+[testenv]
+passenv = WINDIR
+setenv =
+    PYTHONDONTWRITEBYTECODE = 1
+commands =
+    {envpython} --version
+    {envpython} -m tests {posargs}
+extras = test
+deps =
+    {[base]deps}
+
+[testenv:pypy39win]
+basepython = C:\\PyPy39\\pypy.exe
+
+[testenv:pypy310win]
+basepython = C:\\PyPy310\\pypy.exe
+
+[testenv:prepare]
+basepython = {[base]basepython}
+skip_install = true
+allowlist_externals =
+    cmd
+    .build
+commands =
+    cmd /C if exist .build.cmd .build.cmd
+
+[testenv:coverage]
+basepython = {[base]basepython}
+commands =
+    {envpython} -m coverage erase
+    -{envpython} -m coverage run -m tests {posargs}
+    {envpython} -m coverage report
+    {envpython} -m coverage html
+deps =
+    {[testenv]deps}
+    coverage>=7.4.0
+    covdefaults>=2.3.0
+    diff-cover>=7.7.0
+
+[testenv:docs]
+basepython = {[base]basepython}
+commands =
+    {envpython} -m sphinxlint --ignore .tox --ignore build --ignore dist
+   #{envpython} -m sphinx.apidoc -f {envsitepackagesdir}/{[base]packagesubdir}
+    {envpython} -m sphinx.cmd.build -W -a -b html -E   ./docs ./build/docs/html
+    {envpython} -m sphinx.cmd.build -W -a -b linkcheck ./docs ./build/docs/html
+    {envpython} -m sphinx.cmd.build -W -a -b doctest   ./docs ./build/docs/html
+extras = doc
+deps =
+
+[testenv:build]
+depends = py{38,39,310,311,312}, pypy{39,310}win, docs
+basepython = {[base]basepython}
+skip_install = true
+commands =
+    {envpython} -c "import warnings ; warnings.filterwarnings('ignore') ; from setuptools import setup ; setup()" --quiet sdist --formats=zip
+    {envpython} -c "import warnings ; warnings.filterwarnings('ignore') ; from setuptools import setup ; setup()" --quiet bdist_wheel
+    # check out for PyPi
+    {envpython} -m twine check dist/*
+deps =
+    {[testenv]deps}
+    twine>=4.0.2
+
+[testenv:publish]
+depends = build
+basepython = {[base]basepython}
+skip_install = true
+commands =
+    # publish on PyPi
+    {envpython} -m twine upload dist/*
+extras =
+deps =
+    twine>=4.0.2
+
+[testenv:lint]
+basepython = {[base]basepython}
+commands =
+    {envpython} -m flake8 {envsitepackagesdir}/{[base]packagesubdir}/
+extras =
+deps =
+    {[testenv]deps}
+    flake8>=7.0.0
+    flake8-pyproject>=1.2.3
+    flake8-docstrings>=1.7.0
+    pep8-naming>=0.13.3
+    flake8-builtins>=2.2.0
+    flake8-deprecated>=2.2.1
+"""
