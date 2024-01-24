@@ -8,7 +8,7 @@ requires = ['setuptools>=68.2.2', 'wheel>=0.42.0', 'packaging>=23.2.0', 'tox>=4.
 
 [project]
 name        = 'tox-backtick'
-version     = '0.4.0'
+version     = '0.4.1'
 description = 'Backticks tox plugin for tox v.4.x.x.'
 urls.Homepage      = 'https://pypi.org/project/tox-backtick/'
 urls.Documentation = 'https://tox-backtick.readthedocs.io/'
