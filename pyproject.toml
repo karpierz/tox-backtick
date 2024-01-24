@@ -234,7 +234,11 @@ deps =
 [testenv:build]
 depends = py{38,39,310,311,312}, pypy{39,310}win, docs
 basepython = {[base]basepython}
-skip_install = true
+setenv =
+    {[testenv]setenv}
+    PKG_PVER=`{envpython} -c "import platform ; print(''.join(platform.python_version_tuple()[:2]), end='')" 2> nul`
+    PKG_NAME=`{envpython} -c "import warnings ; warnings.filterwarnings('ignore') ; import setuptools ; setuptools._distutils.core._setup_stop_after='config' ; print(setuptools.setup().metadata.get_name(),     end='')" 2> nul`
+    PKG_DIST=`{envpython} -c "import warnings ; warnings.filterwarnings('ignore') ; import setuptools ; setuptools._distutils.core._setup_stop_after='config' ; print(setuptools.setup().metadata.get_fullname(), end='')" 2> nul`
 commands =
     {envpython} -c "import warnings ; warnings.filterwarnings('ignore') ; from setuptools import setup ; setup()" --quiet sdist --formats=zip
     {envpython} -c "import warnings ; warnings.filterwarnings('ignore') ; from setuptools import setup ; setup()" --quiet bdist_wheel
