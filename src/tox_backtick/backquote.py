@@ -1,5 +1,5 @@
 # Copyright (c) 2023 Damien Nadé
-# Copyright (c) 2024-2024 Adam Karpierz
+# Copyright (c) 2024 Adam Karpierz
 # Licensed under the LGPL-2.1-or-later License
 # https://opensource.org/license/lgpl-2-1
 
