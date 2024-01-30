@@ -3,7 +3,6 @@
 # https://opensource.org/license/zlib
 
 import unittest
-from pathlib import Path
 
 import tox_backtick
 
