@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.4.5 (2024-07-15)
+------------------
+- Setup (dependencies) update.
+- Corrected licence information in README.rst
+
 0.4.4 (2024-01-26)
 ------------------
 - Cleanup.

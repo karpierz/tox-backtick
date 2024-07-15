@@ -1,7 +1,6 @@
 # Copyright (c) 2023 Damien Nadé
 # Copyright (c) 2024 Adam Karpierz
-# Licensed under the LGPL-2.1-or-later License
-# https://opensource.org/license/lgpl-2-1
+# SPDX-License-Identifier: LGPL-2.1-or-later
 
 """A tox plugin that allows backquote expansion in set_env section.
 """

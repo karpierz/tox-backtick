@@ -124,8 +124,8 @@ License
 
   | Copyright (c) 2023 Damien Nadé
   | Copyright (c) 2024-2024 Adam Karpierz
-  | Licensed under the zlib/libpng License
-  | https://opensource.org/license/zlib
+  | Licensed under the LGPL-2.1-or-later License
+  | https://opensource.org/license/lgpl-2-1
   | Please refer to the accompanying LICENSE file.
 
 Authors
