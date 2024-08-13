@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Damien Nadé
+# Copyright (c) 2023 Damien NadÃ©
 # Copyright (c) 2024 Adam Karpierz
 # SPDX-License-Identifier: LGPL-2.1-or-later
 
