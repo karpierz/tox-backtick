@@ -1,13 +1,13 @@
 # Copyright (c) 2020 Adam Karpierz
-# SPDX-License-Identifier: Zlib
+# SPDX-License-Identifier: LGPL-2.1-or-later
 
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = ['setuptools>=70.3.0', 'wheel>=0.43.0', 'packaging>=24.1.0', 'tox>=4.16.0']
+requires = ['setuptools>=72.2.0', 'wheel>=0.44.0', 'packaging>=24.1.0', 'tox>=4.18.0']
 
 [project]
 name        = 'tox-backtick'
-version     = '0.4.5'
+version     = '0.4.6'
 description = 'Backticks tox plugin for tox v.4.x.x.'
 urls.Homepage      = 'https://pypi.org/project/tox-backtick/'
 urls.Documentation = 'https://tox-backtick.readthedocs.io/'
@@ -37,6 +37,7 @@ classifiers = [
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
     'Programming Language :: Python :: 3 :: Only',
     'Programming Language :: Python :: Implementation :: CPython',
     'Programming Language :: Python :: Implementation :: PyPy',
@@ -48,8 +49,8 @@ classifiers = [
 requires-python = '>=3.8.10,<4.0.0'
 dependencies = [
     # mandatory
-    'setuptools>=70.3.0',
-    'pkg-about>=1.1.7',
+    'setuptools>=72.2.0',
+    'pkg-about>=1.1.8',
     # others
     'tox>=4.12.1',
 ]
@@ -161,16 +162,16 @@ count = true
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{38,39,310,311,312}, pypy{39,310}, docs
+envlist = py{38,39,310,311,312,313}, pypy{39,310}, docs
 labels =
-    py = py{38,39,310,311,312}, pypy{39,310}
+    py = py{38,39,310,311,312,313}, pypy{39,310}
     prepare = prepare
     coverage = coverage
     lint = lint
     docs = docs
-    build  = py{38,39,310,311,312}, pypy{39,310}, docs, build
-    deploy = py{38,39,310,311,312}, pypy{39,310}, docs, build, publish
-minversion = 4.16.0
+    build  = py{38,39,310,311,312,313}, pypy{39,310}, docs, build
+    deploy = py{38,39,310,311,312,313}, pypy{39,310}, docs, build, publish
+minversion = 4.18.0
 skip_missing_interpreters = true
 requires =
     {[base]deps}
@@ -180,9 +181,9 @@ requires =
 [base]
 basepython = python3.12
 deps =
-    pip>=24.1.2
-    setuptools>=70.3.0
-    wheel>=0.43.0
+    pip>=24.2.0
+    setuptools>=72.2.0
+    wheel>=0.44.0
 packagesubdir = tox_backtick
 
 [testenv]
@@ -214,9 +215,9 @@ commands =
     {envpython} -m coverage html
 deps =
     {[testenv]deps}
-    coverage>=7.6.0
+    coverage>=7.6.1
     covdefaults>=2.3.0
-    diff-cover>=9.1.0
+    diff-cover>=9.1.1
 
 [testenv:docs]
 basepython = {[base]basepython}
@@ -230,7 +231,7 @@ extras = doc
 deps =
 
 [testenv:build]
-depends = py{38,39,310,311,312}, pypy{39,310}, docs
+depends = py{38,39,310,311,312,313}, pypy{39,310}, docs
 basepython = {[base]basepython}
 setenv =
     {[testenv]setenv}
@@ -264,7 +265,7 @@ commands =
 extras =
 deps =
     {[testenv]deps}
-    flake8>=7.1.0
+    flake8>=7.1.1
     flake8-pyproject>=1.2.3
     flake8-docstrings>=1.7.0
     pep8-naming>=0.14.1

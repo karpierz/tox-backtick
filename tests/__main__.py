@@ -1,5 +1,5 @@
 # Copyright (c) 2020 Adam Karpierz
-# SPDX-License-Identifier: Zlib
+# SPDX-License-Identifier: LGPL-2.1-or-later
 
 import unittest
 import sys
