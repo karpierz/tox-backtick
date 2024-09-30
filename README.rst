@@ -73,7 +73,7 @@ Installation
 
 Prerequisites:
 
-+ Python 3.8 or higher
++ Python 3.9 or higher
 
   * https://www.python.org/
 
@@ -122,8 +122,8 @@ or on development mode:
 License
 =======
 
+  | |copyright|
   | Copyright (c) 2023 Damien Nadé
-  | Copyright (c) 2024-2024 Adam Karpierz
   | Licensed under the LGPL-2.1-or-later License
   | https://opensource.org/license/lgpl-2-1
   | Please refer to the accompanying LICENSE file.
@@ -136,6 +136,7 @@ Authors
 
 .. |package| replace:: tox-backtick
 .. |package_bold| replace:: **tox-backtick**
+.. |copyright| replace:: Copyright (c) 2024-2024 Adam Karpierz
 .. |respository| replace:: https://github.com/karpierz/tox-backtick.git
 .. _Development page: https://github.com/karpierz/tox-backtick
 .. _PyPI record: https://pypi.org/project/tox-backtick/
