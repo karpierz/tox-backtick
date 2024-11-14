@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5.3 (2024-11-13)
+0.5.4 (2024-11-13)
 ------------------
 - 100% code linting.
 - Tox configuration is now in native (toml) format.
