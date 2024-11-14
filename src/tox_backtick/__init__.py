@@ -2,8 +2,7 @@
 # Copyright (c) 2024 Adam Karpierz
 # SPDX-License-Identifier: LGPL-2.1-or-later
 
-"""A tox plugin that allows backquote expansion in set_env section.
-"""
+"""A tox plugin that allows backquote expansion in set_env section."""
 
 from .__about__ import * ; del __about__  # noqa
 

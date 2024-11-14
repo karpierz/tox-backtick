@@ -17,8 +17,8 @@ def set_env_items(self: SetEnv) -> Iterator[Tuple[str, str]]:
     # start with the materialized ones, maybe we don't need to materialize the
     # raw ones
     yield from self._materialized.items()
-    yield from list(self._raw.items())  # iterating over this may trigger
-                                        # materialization and change the dict
+    # iterating over this may trigger materialization and change the dict
+    yield from list(self._raw.items())
     while self._needs_replacement:
         line = self._needs_replacement.pop(0)
         expanded_line = self._replacer(line, ConfigLoadArgs([], self._name, self._env_name))

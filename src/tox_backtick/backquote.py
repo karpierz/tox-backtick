@@ -41,16 +41,18 @@ def eval_cache_decorator(func: EvalFunc) -> EvalFunc:
 
 
 def has_backticks(string: str) -> Optional[str]:
-    """If given parameter is a backquote string, then return the part inside
+    """Returns the string part inside the backquotes.
+
+    If given parameter is a backquote string, then return the part inside
     the backquotes. Else return None, making the function result booleanish.
     """
-    if len(string) > 2 and \
-        string.startswith('`') and string.endswith('`'):
+    if len(string) > 2 and string.startswith('`') and string.endswith('`'):
         return string[1:-1]
-    return None
+    else:
+        return None
 
 
-#@eval_cache_decorator
+# @eval_cache_decorator
 def eval_backquote(tox_env: ToxEnv, cmd: str, var: str) -> str:
     """Evaluate a command inside a tox environment"""
     args = [(arg[1:-1] if arg.startswith('"') and arg.endswith('"') else arg)
