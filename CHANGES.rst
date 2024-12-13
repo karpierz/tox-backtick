@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.5.5 (2024-12-13)
+------------------
+- Source distribution (\*.tar.gz now) is compliant with PEP-0625.
+- Setup (dependencies) update.
+
 0.5.4 (2024-11-13)
 ------------------
 - 100% code linting.
