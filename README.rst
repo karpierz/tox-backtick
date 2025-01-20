@@ -136,7 +136,7 @@ Authors
 
 .. |package| replace:: tox-backtick
 .. |package_bold| replace:: **tox-backtick**
-.. |copyright| replace:: Copyright (c) 2024-2024 Adam Karpierz
+.. |copyright| replace:: Copyright (c) 2024-2025 Adam Karpierz
 .. |respository| replace:: https://github.com/karpierz/tox-backtick.git
 .. _Development page: https://github.com/karpierz/tox-backtick
 .. _PyPI record: https://pypi.org/project/tox-backtick/
