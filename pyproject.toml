@@ -3,11 +3,11 @@
 
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = ['setuptools>=75.8.0', 'packaging>=24.2.0', 'tox>=4.23.2']
+requires = ['setuptools>=75.8.0', 'packaging>=24.2.0', 'tox>=4.24.1']
 
 [project]
 name        = 'tox-backtick'
-version     = '0.5.6'
+version     = '0.5.7'
 description = 'Backticks tox plugin for tox v.4.x.x.'
 urls.Homepage      = 'https://pypi.org/project/tox-backtick/'
 urls.Documentation = 'https://tox-backtick.readthedocs.io/'
@@ -49,9 +49,9 @@ requires-python = '>=3.9.0,<4.0.0'
 dependencies = [
     # mandatory
     'setuptools>=75.8.0',
-    'pkg-about>=1.2.7',
+    'pkg-about>=1.2.8',
     # others
-    'tox>=4.23.2',
+    'tox>=4.24.1',
 ]
 dynamic = ['readme']
 optional-dependencies.'doc' = [
@@ -160,7 +160,7 @@ count = true
 
 [tool.tox]  # tox-backtick
 env_list = [{replace='ref',of=['tool','tox','labels','py'],extend=true}, 'lint', 'docs']
-min_version = '4.23.2'
+min_version = '4.24.1'
 skip_missing_interpreters = true
 requires = [
     {replace='ref',of=['tool','tox','_','base','deps'],extend=true},
@@ -248,7 +248,7 @@ commands = [
 ]
 deps = [
     {replace='ref',of=['tool','tox','env_run_base','deps'],extend=true},
-    'twine>=6.0.1',
+    'twine>=6.1.0',
 ]
 
 [tool.tox.env.'publish']
@@ -261,7 +261,7 @@ commands = [
 ]
 extras = []
 deps = [
-    'twine>=6.0.1',
+    'twine>=6.1.0',
 ]
 
 [tool.tox.env.'lint']
