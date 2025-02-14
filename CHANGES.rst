@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.8 (2025-02-14)
+------------------
+- Setup (dependencies) update.
+
 0.5.7 (2025-01-25)
 ------------------
 - Setup (dependencies) update.
