@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6.2 (2025-05-15)
+------------------
+- Setup (dependencies) update (due to regressions in tox and setuptools).
+
 0.6.1 (2025-05-04)
 ------------------
 - Setup (dependencies) update.
