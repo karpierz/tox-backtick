@@ -1,8 +1,9 @@
 Changelog
 =========
 
-0.6.2 (2025-05-15)
+0.6.3 (2025-05-15)
 ------------------
+- The distribution is now created using 'build' instead of 'setuptools'.
 - Setup (dependencies) update (due to regressions in tox and setuptools).
 
 0.6.1 (2025-05-04)
