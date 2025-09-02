@@ -4,8 +4,8 @@
 
 """Functions related to backquotes detection and evaluation"""
 
-
-from typing import Any, Optional, Tuple, Callable, Iterator
+from typing import TypeAlias, Any
+from collections.abc import Callable, Iterator
 import sys
 import shlex
 from pathlib import Path
@@ -14,14 +14,14 @@ from tox.tox_env.api import ToxEnv
 from tox.execute.api import StdinSource
 from .setenv import set_env_items
 
+EvalFunc: TypeAlias = Callable[[ToxEnv, str, str], str]
+
 if sys.platform.startswith("win32"):
     SHELL = "cmd"
     CMD_SW = "/C"
 else:
     SHELL = "bash"
     CMD_SW = "-c"
-
-EvalFunc = Callable[[ToxEnv, str, str], str]
 
 
 def eval_cache_decorator(func: EvalFunc) -> EvalFunc:
@@ -40,7 +40,7 @@ def eval_cache_decorator(func: EvalFunc) -> EvalFunc:
     return _function
 
 
-def has_backticks(string: str) -> Optional[str]:
+def has_backticks(string: str) -> str | None:
     """Returns the string part inside the backquotes.
 
     If given parameter is a backquote string, then return the part inside
@@ -62,7 +62,7 @@ def eval_backquote(tox_env: ToxEnv, cmd: str, var: str) -> str:
     return outcome.out.rstrip('\r\n')
 
 
-def set_env_backquote_items(self) -> Iterator[Tuple[str, str]]:
+def set_env_backquote_items(self: Any) -> Iterator[tuple[str, str]]:
     for var, value in set_env_items(self):
         if cmd := has_backticks(value):
             yield var, cmd
