@@ -51,6 +51,9 @@ Here’s the roadmap to 1.0 release and our current status:
        it’s hacked, but heh, better than nothing)
 -  \[x\] If evaluating through a shell, automatically add said shell to
        ``allowlist_externals`` section
+-  \[x\] Use the command string as is if 1st character in the command string
+       is the + char (immediately after initial backtick). Bypasses the use
+       of shlex.split() before handing off to tox_env.execute().
 -  \[x\] Have a working package
 -  \[ \] Write user documentation
 

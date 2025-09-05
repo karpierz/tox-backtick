@@ -9,6 +9,7 @@ from typing import Any, Optional, Tuple, Callable, Iterator
 import sys
 import shlex
 from pathlib import Path
+import logging
 
 from tox.tox_env.api import ToxEnv
 from tox.execute.api import StdinSource
@@ -22,6 +23,8 @@ else:
     CMD_SW = "-c"
 
 EvalFunc = Callable[[ToxEnv, str, str], str]
+
+LOGGER = logging.getLogger(__name__)
 
 
 def eval_cache_decorator(func: EvalFunc) -> EvalFunc:
@@ -53,13 +56,19 @@ def has_backticks(string: str) -> Optional[str]:
 
 
 # @eval_cache_decorator
-def eval_backquote(tox_env: ToxEnv, cmd: str, var: str) -> str:
-    """Evaluate a command inside a tox environment"""
-    args = [(arg[1:-1] if arg.startswith('"') and arg.endswith('"') else arg)
+def eval_backquote(tox_env: ToxEnv, cmd: str, var: str, strip_nl: bool) -> str:
+    """Evaluate a command inside a tox environment
+    Because of how bash -c works, we need to provide for using the entire
+    text within the backticks as the 1 string used by -c. As this string has
+    already been interpolated by tox, somewhat handy when constructing if-then-else
+    tests on tox/env variables. See the tests/ for some examples.
+    """
+    args = [cmd[1:]] if cmd.startswith('+') else [(arg[1:-1] if arg.startswith('"') and arg.endswith('"') else arg)
             for arg in shlex.split(cmd, posix=False)]
     outcome = tox_env.execute(cmd=[SHELL, CMD_SW] + args, stdin=StdinSource.OFF,
                               run_id=f"backtick[{var}]", show=False, cwd=Path.cwd())
-    return outcome.out.rstrip('\r\n')
+    LOGGER.debug(f'tox-backtick eval_backquote variable: {var}, replacement value: {outcome.out}')
+    return outcome.out.rstrip('\r\n') if strip_nl else outcome.out
 
 
 def set_env_backquote_items(self) -> Iterator[Tuple[str, str]]:
