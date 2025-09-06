@@ -6,6 +6,7 @@
 
 from .__about__ import * ; del __about__  # type: ignore[name-defined]  # noqa
 
+from tox.config.cli.parser import ToxParser
 from tox.config.sets import EnvConfigSet
 from tox.plugin import impl
 from tox.session.state import State
@@ -32,5 +33,18 @@ def tox_add_env_config(env_conf: EnvConfigSet, state: State) -> None:
 def tox_before_run_commands(tox_env: ToxEnv) -> None:
     """Eval and replace backquotes expressions"""
     set_env = tox_env.conf["set_env"]
-    set_env.update({var: eval_backquote(tox_env, cmd, var)
+    dont_strip_nl = tox_env.options.backtick_no_strip if 'backtick_no_strip' in tox_env.options else False
+    set_env.update({var: eval_backquote(tox_env, cmd, var, not dont_strip_nl)
                     for var, cmd in set_env_backquote_items(set_env)})
+
+
+@impl
+def tox_add_option(parser: ToxParser) -> None:
+    # have to get the parser for commands that need evaluations of
+    # set_env backticks ?
+    for cmd in ['run', 'exec','run-parallel','legacy' ]:
+        run_parser: ToxParser = parser.handlers[cmd]
+        if run_parser:
+            run_parser[0].add_argument("--backtick-no-strip", action="store_true",
+                                       help="do not strip out LF, CR characters from backtick results",
+                                       dest="backtick_no_strip" ) # default is to strip out the \n\r chars
