@@ -4,7 +4,7 @@
 
 """Things I'd like to add to tox itself"""
 
-from typing import Tuple, Iterator
+from collections.abc import Iterator
 
 from tox.config.loader.api import ConfigLoadArgs
 from tox.config.set_env import SetEnv
@@ -12,7 +12,7 @@ from tox.config.set_env import SetEnv
 # pylint: disable=protected-access
 
 
-def set_env_items(self: SetEnv) -> Iterator[Tuple[str, str]]:
+def set_env_items(self: SetEnv) -> Iterator[tuple[str, str]]:
     """Yield var _and_ value of a SetEnv object"""
     # start with the materialized ones, maybe we don't need to materialize the
     # raw ones

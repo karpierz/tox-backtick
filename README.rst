@@ -19,7 +19,7 @@ Overview below is a copy from the original tox-backtocks_ README.md:
 tox-backtocks
 -------------
 
-|PyPI version| |Supported Python Version| |License| |PyPI - Downloads|
+|PyPI version| |Supported Python Version| |License|
 
 A refreshed backticks tox plugin
 
@@ -63,8 +63,6 @@ Here’s the roadmap to 1.0 release and our current status:
    :target: https://pypi.org/project/tox-backtocks/
 .. |License| image:: https://img.shields.io/pypi/l/tox-backtocks?color=green&logo=GNU&style=plastic
    :target: https://github.com/Anvil/tox-backtocks/blob/main/LICENSE
-.. |PyPI - Downloads| image:: https://img.shields.io/pypi/dm/tox-backtocks?color=magenta&style=plastic
-   :target: https://pypistats.org/packages/tox-backtocks
 
 Usage
 -----

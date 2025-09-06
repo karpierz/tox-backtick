@@ -4,7 +4,7 @@
 
 """A tox plugin that allows backquote expansion in set_env section."""
 
-from .__about__ import * ; del __about__  # noqa
+from .__about__ import * ; del __about__  # type: ignore[name-defined]  # noqa
 
 from tox.config.cli.parser import ToxParser
 from tox.config.sets import EnvConfigSet
