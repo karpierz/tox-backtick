@@ -14,14 +14,15 @@ from tox.config.set_env import SetEnv
 
 def set_env_items(self: SetEnv) -> Iterator[tuple[str, str]]:
     """Yield var _and_ value of a SetEnv object"""
-    # start with the materialized ones, maybe we don't need to materialize the
-    # raw ones
+    # start with the materialized ones, maybe we don't need to materialize
+    # the raw ones
     yield from self._materialized.items()
     # iterating over this may trigger materialization and change the dict
     yield from list(self._raw.items())
     while self._needs_replacement:
         line = self._needs_replacement.pop(0)
-        expanded_line = self._replacer(line, ConfigLoadArgs([], self._name, self._env_name))
+        expanded_line = self._replacer(line, ConfigLoadArgs([], self._name,
+                                                            self._env_name))
         sub_raw = dict(self._extract_key_value(sub_line)
                        for sub_line in expanded_line.splitlines()
                        if sub_line)

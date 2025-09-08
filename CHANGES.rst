@@ -1,6 +1,20 @@
 Changelog
 =========
 
+1.0.0 (2025-09-08)
+------------------
+- Bypass shlex usage if command string begins with +
+- Added backtick_no_strip option.
+- Added some tests to confirm new behaviour.
+- | `All of the above was done thanks to the patch from Steve Hespelt.
+    <https://github.com/karpierz/tox-backtick/pull/1>`_
+  | Thank you very much, Steve (SteveHespelt@Github) for the patch!
+- | Some changes in testing to ensure compatibility with Windows and
+  | discontinuation of pytest in favour of unittest only.
+- Making the package typed.
+- 100% code coverage (also thanks to Steve's tests ;).
+- Setup (dependencies) update.
+
 0.8.0 (2025-09-01)
 ------------------
 - Making the package typed.
