@@ -3,19 +3,19 @@
 
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = ['setuptools>=80.9.0', 'packaging>=25.0.0', 'tox>=4.29.0']
+requires = ['setuptools>=80.9.0', 'packaging>=25.0.0', 'tox>=4.32.0']
 
 [project]
 name        = 'tox-backtick'
-version     = '0.8.0'
+version     = '1.0.5'
 description = 'Backticks tox plugin for tox v.4.x.x.'
 authors = [
-    { name  = 'Damien Nadé, Adam Karpierz' },
-    { email = 'adam@karpierz.net' },
+    { name  = 'Adam Karpierz', email = 'adam@karpierz.net' },
+    { name  = 'Damien Nadé', email = 'anvil.github+tox-backtocks@livna.org' },
+    { name  = 'Steve Hespelt' },
 ]
 maintainers = [
-    { name  = 'Adam Karpierz' },
-    { email = 'adam@karpierz.net' },
+    { name  = 'Adam Karpierz', email = 'adam@karpierz.net' },
 ]
 license = 'LGPL-2.1'
 license-files = ['LICENSE']
@@ -44,14 +44,15 @@ classifiers = [
     'Topic :: Software Development :: Testing',
     'Environment :: Console',
     'Framework :: tox',
+    'Typing :: Typed',
 ]
 requires-python = '>=3.10.0,<4.0.0'
 dependencies = [
     # mandatory
     'setuptools>=80.9.0',
-    'pkg-about>=1.4.0',
+    'pkg-about>=2.0.0',
     # others
-    'tox>=4.29.0',
+    'tox>=4.32.0',
 ]
 dynamic = ['readme']
 optional-dependencies.'doc' = [
@@ -61,13 +62,14 @@ optional-dependencies.'doc' = [
     'sphinx-tabs>=3.4.5', # don't touch! sphinx-toolbox requires <3.4.7
     'sphinx-copybutton>=0.5.2',
     'sphinxcontrib-spelling>=8.0.1',
-    'sphinx-lint>=1.0.0',
+    'sphinx-lint>=1.0.1',
     'restructuredtext-lint>=1.4.0',
     'nbsphinx>=0.9.7',
 ]
 optional-dependencies.'test' = [
-    'deepdiff>=8.6.0',
-    'rich>=14.1.0',
+    'deepdiff>=8.6.1',
+    'rich>=14.2.0',
+    'iniconfig>=2.3.0',
 ]
 
 [project.scripts]
@@ -126,6 +128,8 @@ report.exclude_also = [
     '''if\s+__name__.*\s*==\s*['"]__main__['"]\s*:''',
     '^\s*@unittest\.skip\(',
     '^\s*@unittest\.skipIf\(sys\.platform\.startswith\("win"\)',
+    '^\s*@unittest\.skipIf\(is_windows,',
+    '^\s*@unittest\.skipIf\(is_cpython,',
     'if typing.TYPE_CHECKING:',
 ]
 report.omit = [
@@ -175,16 +179,17 @@ files = ['src']
 
 [tool.tox]
 env_list = [{replace='ref',of=['tool','tox','labels','py'],extend=true},
-            'typing', 'lint', 'docs']
-min_version = '4.29.0'
+            'coverage', 'typing', 'lint', 'docs']
 skip_missing_interpreters = true
 requires = [
     {replace='ref',of=['tool','tox','_','base','deps'],extend=true},
-    'virtualenv>=20.34.0',
+    'tox>=4.32.0',
+    'virtualenv>=20.35.4',
 ]
 [tool.tox.labels]
 py = ['py310','py311','py312','py313','py314', 'pypy310','pypy311']
-prepare = ['prepare']
+prepare = ['cleanup', 'prepare']
+cleanup = ['cleanup']
 coverage = ['coverage']
 typing = ['typing']
 lint = ['lint']
@@ -195,7 +200,7 @@ deploy = [{replace='ref',of=['tool','tox','labels','build'],extend=true}, 'publi
 [tool.tox._.base]
 base_python = ['python3.13']
 deps = [
-    'pip>=25.2',
+    'pip>=25.3',
     'setuptools>=80.9.0',
 ]
 package_subdir = 'tox_backtick'
@@ -213,14 +218,32 @@ deps = [
 ]
 
 [tool.tox.env.'prepare']
+depends = ['cleanup']
 base_python = {replace='ref',of=['tool','tox','_','base','base_python']}
 skip_install = true
-allowlist_externals = [
-    'cmd',
-    '.build',
-]
+allowlist_externals = ['cmd', '.build']
 commands = [
     ['cmd','/C','if','exist','.build.cmd','.build.cmd'],
+]
+extras = []
+deps = []
+
+[tool.tox.env.'cleanup']
+base_python = {replace='ref',of=['tool','tox','_','base','base_python']}
+skip_install = true
+no_package = true
+env_log_dir = '{env:TMP_DIR}{/}tox.env.{env_name}-{env:PYTHONHASHSEED}{/}log'
+env_tmp_dir = '{env:TMP_DIR}{/}tox.env.{env_name}-{env:PYTHONHASHSEED}{/}tmp'
+allowlist_externals = ['cmd', '.clean']
+commands = [
+    ['cmd','/C','if','exist','.clean.cmd','.clean.cmd','2>','nul'],
+    ['{env_python}','-W','ignore','-c',"import shutil ; shutil.rmtree('build', ignore_errors=True)"],
+    ['{env_python}','-W','ignore','-c',"import shutil ; shutil.rmtree('dist', ignore_errors=True)"],
+    ['{env_python}','-W','ignore','-c',"import shutil,glob ; [shutil.rmtree(item) for item in glob.glob('src/*.egg-info')]"],
+    ['{env_python}','-W','ignore','-c',"import shutil,glob ; [shutil.rmtree(item) for item in glob.glob('**/__pycache__', recursive=True)]"],
+    ['{env_python}','-W','ignore','-c',"import shutil,glob ; [shutil.rmtree(item) for item in glob.glob('**/.mypy_cache', recursive=True)]"],
+    ['cmd','/C','if','exist','.tox','rmdir','/S/Q','.tox','2>','nul'],
+    ['cmd','/C','if','exist','.tox_tests','rmdir','/S/Q','.tox_tests','2>','nul'],
 ]
 extras = []
 deps = []
@@ -235,15 +258,15 @@ commands = [
 ]
 deps = [
     {replace='ref',of=['tool','tox','env_run_base','deps'],extend=true},
-    'coverage>=7.10.6',
+    'coverage>=7.11.2',
     'covdefaults>=2.3.0',
-    'diff-cover>=9.6.0',
+    'diff-cover>=9.7.1',
 ]
 
 [tool.tox.env.'docs']
 base_python = {replace='ref',of=['tool','tox','_','base','base_python']}
 commands = [
-    ['{env_python}','-m','sphinxlint','--ignore','.tox','--ignore','build','--ignore','dist'],
+    ['{env_python}','-m','sphinxlint','-i','#arch','-i','.tox','-i','build','-i','dist','-i','.mypy_cache'],
    #['{env_python}','-m','sphinx.apidoc','-f','{env_site_packages_dir}/{[tool.tox._.base]package_subdir}'],
     ['{env_python}','-m','sphinx.cmd.build','-W','-a','-b','html','-E','./docs','./build/docs/html'],
     ['{env_python}','-m','sphinx.cmd.build','-W','-a','-b','linkcheck','./docs','./build/docs/html'],
@@ -258,14 +281,16 @@ deps = [
 depends = [{replace='ref',of=['tool','tox','labels','py'],extend=true}, 'docs']
 base_python = {replace='ref',of=['tool','tox','_','base','base_python']}
 commands = [
+    ['{env_python}','-m','check_manifest','-v'],
     ['{env_python}','-m','build'],
     # check out for PyPi
     ['{env_python}','-m','twine','check','dist/*'],
 ]
 deps = [
     {replace='ref',of=['tool','tox','env_run_base','deps'],extend=true},
+    'check-manifest>=0.51',
     'build>=1.3.0',
-    'twine>=6.1.0',
+    'twine>=6.2.0',
 ]
 
 [tool.tox.env.'publish']
@@ -278,7 +303,7 @@ commands = [
 ]
 extras = []
 deps = [
-    'twine>=6.1.0',
+    'twine>=6.2.0',
 ]
 
 [tool.tox.env.'typing']
@@ -290,7 +315,7 @@ commands = [
 extras = []
 deps = [
     {replace='ref',of=['tool','tox','_','base','deps'],extend=true},
-    'mypy>=1.17.1',
+    'mypy>=1.18.2',
     'mypy_extensions>=1.1.0',
     'types-setuptools>=80.9.0.20250822',
 ]
@@ -308,6 +333,6 @@ deps = [
     'flake8-pyproject>=1.2.3',
     'flake8-docstrings>=1.7.0',
     'pep8-naming>=0.15.1',
-    'flake8-builtins>=3.0.0',
-    'flake8-deprecated>=2.2.1',
+    'flake8-builtins>=3.1.0',
+    'flake8-deprecated>=2.3.0',
 ]

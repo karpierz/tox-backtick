@@ -125,6 +125,7 @@ License
 
   | |copyright|
   | Copyright (c) 2023 Damien Nadé
+  | Copyright (c) 2025 Steve Hespelt
   | Licensed under the LGPL-2.1-or-later License
   | https://opensource.org/license/lgpl-2-1
   | Please refer to the accompanying LICENSE file.
@@ -134,6 +135,7 @@ Authors
 
 * Damien Nadé <anvil.github+tox-backtocks@livna.org>
 * Adam Karpierz <adam@karpierz.net>
+* Steve Hespelt
 
 .. |package| replace:: tox-backtick
 .. |package_bold| replace:: **tox-backtick**
