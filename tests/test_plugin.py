@@ -1,9 +1,14 @@
-import os
-import pytest
-import re
-import unittest
+# Copyright (c) 2025 Steve Hespelt
+# Copyright (c) 2024 Adam Karpierz
+# SPDX-License-Identifier: LGPL-2.1-or-later
 
-from tox_backtick.test import ToxTestCase
+import unittest
+import sys
+import os
+import re
+import shutil
+
+from .test import ToxTestCase
 
 
 class ToxTestCaseTests(unittest.TestCase):
@@ -17,12 +22,12 @@ class ToxTestCaseTests(unittest.TestCase):
 
         self.assertEqual(
             str(excinfo.exception),
-            '`tests.test_plugin.Dummy.ini_contents` has not been set.',
+            "`tests.test_plugin.Dummy.ini_contents` has not been set.",
         )
 
     def test_tox_envlist(self):
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [tox]
             envlist = py39,py312
 
@@ -32,7 +37,7 @@ class ToxTestCaseTests(unittest.TestCase):
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
@@ -43,15 +48,14 @@ class ToxTestCaseTests(unittest.TestCase):
             testcase.tearDownClass()
 
         # by default, tox does not list testenvs not present in `envlist`.
-        self.assertEqual(envlist, ['py39', 'py312'])
+        self.assertEqual(envlist, ["py39", "py312"])
 
     def test_tox_call(self):
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [testenv:lint]
-            commands = python -c "print('clean')"
+            commands = {env_python} -c "print('clean')"
             """
-
             setup_contents = """
             from setuptools import setup
 
@@ -61,50 +65,49 @@ class ToxTestCaseTests(unittest.TestCase):
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
         try:
             testcase.setUpClass()
-            returncode, stdout, stderr = testcase.tox_call(['run', '-e', 'lint'])
+            returncode, stdout, stderr = testcase.tox_call("run", "-e", "lint")
         finally:
             testcase.tearDownClass()
 
         self.assertEqual(returncode, 0)
-        self.assertIn('lint: OK', stdout)
+        self.assertIn("lint: OK", stdout)
 
     def test_tox_call_no_setup_module(self):
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [testenv:lint]
-            commands = python -c "print('clean')"
+            commands = {env_python} -c "print('clean')"
             """
 
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
         try:
             testcase.setUpClass()
-            returncode, stdout, stderr = testcase.tox_call(['run', '-e', 'lint'])
+            returncode, stdout, stderr = testcase.tox_call("run", "-e", "lint")
         finally:
             testcase.tearDownClass()
 
         self.assertEqual(returncode, 0)
-        self.assertIn('lint: OK', stdout)
+        self.assertIn("lint: OK", stdout)
 
 
     def test_argument_present(self):
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [testenv:lint]
-            commands = python -c "print('clean')"
+            commands = {env_python} -c "print('clean')"
             """
-
             setup_contents = """
             from setuptools import setup
 
@@ -114,27 +117,28 @@ class ToxTestCaseTests(unittest.TestCase):
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
         try:
             testcase.setUpClass()
-            returncode, stdout, stderr = testcase.tox_call(['run', '--help'])
+            returncode, stdout, stderr = testcase.tox_call("run", "--help")
         finally:
             testcase.tearDownClass()
 
         self.assertEqual(returncode, 0)
-        self.assertIn('--backtick-no-strip', stdout)
+        self.assertIn("--backtick-no-strip", stdout)
 
+    @unittest.skipIf(sys.platform == "win32" and not shutil.which("bash.exe"),
+                     "This test is skipped on Windows because bash.exe is unavailable!")
     def test_backtick_simple1(self):
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [testenv:lint]
-            set_env=TODAY=`/bin/date`
-            commands = python -c "print('TODAY: \{0}'.format('{env:TODAY:no-date-set}'))"
+            set_env=TODAY=`bash -c /bin/date`
+            commands = {env_python} -c "print('TODAY: \{0}'.format('{env:TODAY:no-date-set}'))"
             """
-
             setup_contents = """
             from setuptools import setup
 
@@ -144,30 +148,32 @@ class ToxTestCaseTests(unittest.TestCase):
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
         try:
             testcase.setUpClass()
-            returncode, stdout, stderr = testcase.tox_call(['run', '-e', 'lint'])
+            returncode, stdout, stderr = testcase.tox_call("run", "-e", "lint")
         finally:
             testcase.tearDownClass()
 
         self.assertEqual(returncode, 0)
         # a date-like string detected >= 2025-07-01
-        date_re = r'TODAY.*(AM|PM).* 2[0-1]\d{2}'
+        date_re = r"TODAY.*(AM|PM).* 2[0-1]\d{2}"
         match = re.search(date_re, stdout)
-        self.assertIsNotNone(match, f"Expected date-like string in output: {stdout} because of backtick evaluation.")
+        self.assertIsNotNone(match, f"Expected date-like string in output: "
+                                    f"{stdout} because of backtick evaluation.")
 
+    @unittest.skipIf(sys.platform == "win32" and not shutil.which("bash.exe"),
+                     "This test is skipped on Windows because bash.exe is unavailable!")
     def test_backtick_not_stripped(self):
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [testenv:lint]
-            set_env=TODAY=`/bin/date`
-            commands = python -c "print('TODAY: \{0} NEXT LINE'.format('{env:TODAY:no-date-set}'))"
+            set_env=TODAY=`bash -c /bin/date`
+            commands = {env_python} -c "print('TODAY: \{0} NEXT LINE'.format('{env:TODAY:no-date-set}'))"
             """
-
             setup_contents = """
             from setuptools import setup
 
@@ -177,33 +183,35 @@ class ToxTestCaseTests(unittest.TestCase):
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
         try:
             testcase.setUpClass()
-            # because of the preservaction of newline chars in the backtick evaluation output, there will be parsing
-            # errors
-            returncode, stdout, stderr = testcase.tox_call(['run', '--backtick-no-strip', '-e', 'lint'])
+            # because of the preservaction of newline chars in the backtick
+            # evaluation output, there will be parsing errors
+            returncode, stdout, stderr = testcase.tox_call("run", "--backtick-no-strip", "-e", "lint")
         finally:
             testcase.tearDownClass()
 
         self.assertNotEqual(returncode, 0)
-        self.assertIn('unterminated string literal', stderr)
+        self.assertIn("unterminated string literal", stderr)
 
-    # Ugh. Can't seemingly parametrize just 1 test method in a class, so we have to use a separate test method
-    # @pytest.mark.parametrize("tox_option,expected", [('--backtick-no-strip', 1),('', 0)])
+    # Ugh. Can't seemingly parametrize just 1 test method in a class, so we
+    # have to use a separate test method.
+    @unittest.skipIf(sys.platform == "win32" and not shutil.which("bash.exe"),
+                     "This test is skipped on Windows because bash.exe is unavailable!")
     def test_backtick_literal_not_stripped(self):
         """
         Test that backtick evaluation uses the entire string as a literal due to the leading + character
         :return:
         """
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [testenv:lint]
-            set_env=TEST1=`+if [ "$VAR_NOT_SET" != "NONE" ] ; then echo 30 ; else echo 5 ; fi`
-            commands = python -c "print('TEST1:\{0}VALUE'.format('{env:TEST1:0}'))"
+            set_env=TEST1=`+bash -c 'if [ "$VAR_NOT_SET" != "NONE" ] ; then echo 30 ; else echo 5 ; fi'`
+            commands = {env_python} -c "print('TEST1:\{0}VALUE'.format('{env:TEST1:0}'))"
             """
 
             setup_contents = """
@@ -215,33 +223,33 @@ class ToxTestCaseTests(unittest.TestCase):
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
         try:
             testcase.setUpClass()
-            if 'VAR_NOT_SET' in os.environ:
-                del os.environ['VAR_NOT_SET']
-            args = ['run', '-e', 'lint', '--backtick-no-strip']
-            returncode, stdout, stderr = testcase.tox_call(args)
+            os.environ.pop("VAR_NOT_SET", None)
+            returncode, stdout, stderr = testcase.tox_call("run", "-e", "lint", "--backtick-no-strip")
         finally:
             testcase.tearDownClass()
 
         self.assertEqual(returncode, 1, f"Expected return code {1} but got {returncode}. "
-                                               f"stdout: {stdout}, stderr: {stderr}")
-        self.assertIn('unterminated string literal', stderr)
+                                        f"stdout: {stdout}, stderr: {stderr}")
+        self.assertIn("unterminated string literal", stderr)
 
+    @unittest.skipIf(sys.platform == "win32" and not shutil.which("bash.exe"),
+                     "This test is skipped on Windows because bash.exe is unavailable!")
     def test_backtick_literal_stripped(self):
         """
         Test that backtick evaluation uses the entire string as a literal due to the leading + character
         :return:
         """
         class Dummy(ToxTestCase):
-            ini_contents = """
+            ini_contents = r"""
             [testenv:lint]
-            set_env=TEST1=`+if [ "$VAR_NOT_SET" != "NONE" ] ; then echo 30 ; else echo 5 ; fi`
-            commands = python -c "print('TEST1:\{0}VALUE'.format('{env:TEST1:0}'))"
+            set_env=TEST1=`+bash -c 'if [ "$VAR_NOT_SET" != "NONE" ] ; then echo 30 ; else echo 5 ; fi'`
+            commands = {env_python} -c "print('TEST1:\{0}VALUE'.format('{env:TEST1:0}'))"
             """
 
             setup_contents = """
@@ -253,23 +261,21 @@ class ToxTestCaseTests(unittest.TestCase):
             def runTest(self):
                 # fixes a Python 2 compatibility issue when instantiating a
                 # test case outside of a test suite
-                pass
+                pass  # pragma: no cover
 
         testcase = Dummy()
 
         try:
             testcase.setUpClass()
-            if 'VAR_NOT_SET' in os.environ:
-                del os.environ['VAR_NOT_SET']
-            args = ['run', '-e', 'lint']  #  default action is to strip NL, CR from any backtick output
-            returncode, stdout, stderr = testcase.tox_call(args)
+            os.environ.pop("VAR_NOT_SET", None)
+            #  default action is to strip NL, CR from any backtick output
+            returncode, stdout, stderr = testcase.tox_call("run", "-e", "lint")
         finally:
             testcase.tearDownClass()
 
         self.assertEqual(returncode, 0, f"Expected return code {0} but got {returncode}. "
-                                               f"stdout: {stdout}, stderr: {stderr}")
-        self.assertIn('TEST1:30', stdout)
-        match = re.search(r'TEST1:30VALUE', stdout)  # did the newline get stripped
-        self.assertIsNotNone(match,
-                             f"Expected TEST1:30VALUE with no NL, CR chars at the end of backtick output: {stdout}")
-
+                                        f"stdout: {stdout}, stderr: {stderr}")
+        self.assertIn("TEST1:30", stdout)
+        match = re.search(r"TEST1:30VALUE", stdout)  # did the newline get stripped
+        self.assertIsNotNone(match, f"Expected TEST1:30VALUE with no NL, CR chars "
+                                    f"at the end of backtick output: {stdout}")
