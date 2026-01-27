@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Adam Karpierz
+# Copyright (c) 2023 Adam Karpierz
 # SPDX-License-Identifier: LGPL-2.1-or-later
 
 __all__ = ('top_dir', 'test_dir')

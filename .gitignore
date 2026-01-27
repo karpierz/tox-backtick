@@ -1,5 +1,7 @@
 /#*
+/.nox/
 /.tox/
+/.tox_tests/
 /build/
 /dist/
 *.egg-info

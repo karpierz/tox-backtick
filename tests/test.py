@@ -1,11 +1,16 @@
+# Copyright (c) 2025 Steve Hespelt
+# Copyright (c) 2024 Adam Karpierz
+# SPDX-License-Identifier: LGPL-2.1-or-later
+
+from unittest import TestCase
+import sys
 import os
 import shutil
 import subprocess
 import tempfile
 from textwrap import dedent
-from unittest import TestCase
 
-from py.iniconfig import IniConfig
+from iniconfig import IniConfig
 
 from tox.session.cmd.run.parallel import ENV_VAR_KEY as TOX_PARALLEL_ENV
 
@@ -38,7 +43,8 @@ class ToxTestCase(TestCase):
     """
 
     ini_contents = None
-    ini_filename = 'tox.ini'
+    ini_filename = "tox.ini"
+    tox_workdir  = ".tox_tests"
 
     setup_contents = None
 
@@ -47,7 +53,7 @@ class ToxTestCase(TestCase):
         super(ToxTestCase, cls).setUpClass()
 
         assert cls.ini_contents is not None, (
-            '`{cls.__module__}.{cls.__name__}.ini_contents` has not been set.'
+            "`{cls.__module__}.{cls.__name__}.ini_contents` has not been set."
             .format(cls=cls))
 
         # We can't use the `TemporaryDirectory` context manager since the setup
@@ -56,25 +62,29 @@ class ToxTestCase(TestCase):
         cls._temp_dir = tempfile.mkdtemp()
         cls.ini_filepath = os.path.join(cls._temp_dir, cls.ini_filename)
 
-        with open(cls.ini_filepath, 'w') as ini_file:
+        with open(cls.ini_filepath, "w") as ini_file:
             ini_file.write(dedent(cls.ini_contents))
 
         cls.config = IniConfig(cls.ini_filepath)
 
         # Create package setup module
-        cls.setup_filepath = os.path.join(cls._temp_dir, 'setup.py')
+        cls.setup_filepath = os.path.join(cls._temp_dir, "setup.py")
         if cls.setup_contents is not None:
-            with open(cls.setup_filepath, 'w') as setup_file:
+            with open(cls.setup_filepath, "w") as setup_file:
                 setup_file.write(dedent(cls.setup_contents))
 
     @classmethod
     def tearDownClass(cls):
         del cls.config
         shutil.rmtree(cls._temp_dir)
-
         super(ToxTestCase, cls).tearDownClass()
 
-    def _tox_call(self, arguments):
+    def tox_call(self, *arguments):
+        base = (sys.executable, "-m", "tox",
+                "--conf", self.ini_filepath, "--workdir", self.tox_workdir)
+        return self._tox_call(*base, *arguments)
+
+    def _tox_call(self, *arguments):
         # Remove TOX_PARALLEL_ENV from the subprocess environment variables.
         # See: https://github.com/tox-dev/tox/issues/1275
         env = os.environ.copy()
@@ -84,16 +94,11 @@ class ToxTestCase(TestCase):
             arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
         stdout, stderr = proc.communicate()
 
-        return proc.returncode, stdout.decode('utf-8'), stderr.decode('utf-8')
-
-    def tox_call(self, arguments):
-        base = ['tox', '-c', self.ini_filepath]
-
-        return self._tox_call(base + arguments)
+        return proc.returncode, stdout.decode("utf-8"), stderr.decode("utf-8")
 
     def tox_envlist(self, arguments=None):
-        arguments = arguments if arguments else []
-        returncode, stdout, stderr = self.tox_call(['-l'] + arguments)
+        arguments = arguments or []
+        returncode, stdout, stderr = self.tox_call("-l",  *arguments)
 
         self.assertEqual(returncode, 0, stderr)
 
