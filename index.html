@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tox_backtick documentation &#8212; tox-backtick 2.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+    
+    <script src="_static/documentation_options.js?v=b21de401"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/tabs.js?v=3030b3cb"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="CHANGES.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CHANGES.html" title="Changelog"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">tox-backtick 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">tox_backtick documentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tox-backtick-documentation">
+<h1>tox_backtick documentation<a class="headerlink" href="#tox-backtick-documentation" title="Link to this heading">¶</a></h1>
+</section>
+<section id="tox-backtick">
+<span id="readme"></span><h1>tox-backtick<a class="headerlink" href="#tox-backtick" title="Link to this heading">¶</a></h1>
+<p>Backticks tox plugin for tox v.4.x.x.</p>
+</section>
+<section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
+<p><strong>tox-backtick</strong> is a strict fork of Damien Nadé’s <a class="reference external" href="https://pypi.org/project/tox-backtocks/">tox-backtocks</a> package
+(v.0.4.0) with a fixes allowing to work on Python 3.8 or higher and on
+Windows with a little code reformatting and minor improvements.</p>
+<p><a class="reference external" href="https://pypi.org/project/tox-backtick/">PyPI record</a>.</p>
+<p><a class="reference external" href="https://karpierz.github.io/tox-backtick/">Documentation</a>.</p>
+<p>Overview below is a copy from the original <a class="reference external" href="https://pypi.org/project/tox-backtocks/">tox-backtocks</a> README.md:</p>
+<section id="tox-backtocks">
+<h2>tox-backtocks<a class="headerlink" href="#tox-backtocks" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://pypi.org/project/tox-backtocks/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/tox-backtocks?logo=pypi&amp;style=plastic" /></a> <a class="reference external" href="https://pypi.org/project/tox-backtocks/"><img alt="Supported Python Version" src="https://img.shields.io/pypi/pyversions/tox-backtocks?logo=python&amp;style=plastic" /></a> <a class="reference external" href="https://github.com/Anvil/tox-backtocks/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/pypi/l/tox-backtocks?color=green&amp;logo=GNU&amp;style=plastic" /></a></p>
+<p>A refreshed backticks tox plugin</p>
+<p>This is a very early stage release. Use it at your own risks.</p>
+<p>Here’s the roadmap to 1.0 release and our current status:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>[x] define a <code class="docutils literal notranslate"><span class="pre">backquote</span> <span class="pre">var</span></code> in <code class="docutils literal notranslate"><span class="pre">set_env</span></code> with a</dt><dd><p><code class="docutils literal notranslate"><span class="pre">backquoted</span> <span class="pre">expression</span></code> (and nothing else) and evaluate it
+through bash, inside the tox virtual environment.</p>
+</dd>
+</dl>
+</li>
+<li><p>[x] Make of a <code class="docutils literal notranslate"><span class="pre">backquote</span> <span class="pre">var</span></code> usable in commands section.</p></li>
+<li><dl class="simple">
+<dt>[x] Allow another variable to be referenced inside the</dt><dd><p><code class="docutils literal notranslate"><span class="pre">backquoted</span> <span class="pre">expression</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[x] Strip the trailing newline characters of the</dt><dd><p><code class="docutils literal notranslate"><span class="pre">backquoted</span> <span class="pre">expression</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[ ] Allow user configure the evaluation of <code class="docutils literal notranslate"><span class="pre">backquote</span> <span class="pre">expression</span></code></dt><dd><p>to be with a shell or not (either fork the command directly, either
+fork a shell and evaluate a possible-complex shell expression)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[ ] Allow a <code class="docutils literal notranslate"><span class="pre">backquote</span> <span class="pre">var</span></code> value to contain regular string parts</dt><dd><p>and a <code class="docutils literal notranslate"><span class="pre">backquote</span> <span class="pre">expression</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[ ] Allow a <code class="docutils literal notranslate"><span class="pre">backquote</span> <span class="pre">var</span></code> value to contain more than one</dt><dd><p><code class="docutils literal notranslate"><span class="pre">backquote</span> <span class="pre">expression</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[ ] Allow user to configure if we should strip the trailing newline</dt><dd><p>characters or not.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[x] Allow another variable to reuse the evaluated</dt><dd><p><code class="docutils literal notranslate"><span class="pre">backquoted</span> <span class="pre">expression</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[x] Allow another variable to reuse the evaluated</dt><dd><p><code class="docutils literal notranslate"><span class="pre">backquoted</span> <span class="pre">expression</span></code> without reevaluating it :) (I mean,
+it’s hacked, but heh, better than nothing)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[x] If evaluating through a shell, automatically add said shell to</dt><dd><p><code class="docutils literal notranslate"><span class="pre">allowlist_externals</span></code> section</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>[x] Use the command string as is if 1st character in the command string</dt><dd><p>is the + char (immediately after initial backtick). Bypasses the use
+of shlex.split() before handing off to tox_env.execute().</p>
+</dd>
+</dl>
+</li>
+<li><p>[x] Have a working package</p></li>
+<li><p>[ ] Write user documentation</p></li>
+</ul>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>TBD…</p>
+</section>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
+<p>Prerequisites:</p>
+<ul class="simple">
+<li><p>Python 3.10 or higher</p>
+<ul>
+<li><p><a class="reference external" href="https://www.python.org/">https://www.python.org/</a></p></li>
+</ul>
+</li>
+<li><p>pip</p>
+<ul>
+<li><p><a class="reference external" href="https://pypi.org/project/pip/">https://pypi.org/project/pip/</a></p></li>
+</ul>
+</li>
+</ul>
+<p>To install run:</p>
+<blockquote>
+<div><pre class="literal-block">python -m pip install --upgrade tox-backtick</pre>
+</div></blockquote>
+</section>
+<section id="development">
+<h1>Development<a class="headerlink" href="#development" title="Link to this heading">¶</a></h1>
+<p>Prerequisites:</p>
+<ul>
+<li><p>Development is strictly based on <em>nox</em>. To install it run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">nox</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Visit <a class="reference external" href="https://github.com/karpierz/tox-backtick">Development page</a>.</p>
+<p>Installation from sources:</p>
+<p>clone the sources:</p>
+<blockquote>
+<div><pre class="literal-block">git clone <a class="reference external" href="https://github.com/karpierz/tox-backtick">https://github.com/karpierz/tox-backtick</a> tox-backtick</pre>
+</div></blockquote>
+<p>and run:</p>
+<blockquote>
+<div><pre class="literal-block">python -m pip install ./tox-backtick</pre>
+</div></blockquote>
+<p>or on development mode:</p>
+<blockquote>
+<div><pre class="literal-block">python -m pip install --editable ./tox-backtick</pre>
+</div></blockquote>
+</section>
+<section id="license">
+<h1>License<a class="headerlink" href="#license" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Copyright (c) 2024-2026 Adam Karpierz</div>
+<div class="line">Copyright (c) 2023 Damien Nadé</div>
+<div class="line">Copyright (c) 2025 Steve Hespelt</div>
+<div class="line">Licensed under the LGPL-2.1-or-later License</div>
+<div class="line"><a class="reference external" href="https://opensource.org/license/lgpl-2-1">https://opensource.org/license/lgpl-2-1</a></div>
+<div class="line">Please refer to the accompanying LICENSE file.</div>
+</div>
+</div></blockquote>
+</section>
+<section id="authors">
+<h1>Authors<a class="headerlink" href="#authors" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Damien Nadé &lt;<a class="reference external" href="mailto:anvil&#46;github+tox-backtocks&#37;&#52;&#48;livna&#46;org">anvil<span>&#46;</span>github+tox-backtocks<span>&#64;</span>livna<span>&#46;</span>org</a>&gt;</p></li>
+<li><p>Adam Karpierz &lt;<a class="reference external" href="mailto:adam&#37;&#52;&#48;karpierz&#46;net">adam<span>&#64;</span>karpierz<span>&#46;</span>net</a>&gt;</p></li>
+<li><p>Steve Hespelt</p></li>
+</ul>
+</section>
+<section id="sponsoring">
+<h1>Sponsoring<a class="headerlink" href="#sponsoring" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">If you would like to sponsor the development of this project, your contribution
+is greatly appreciated.</div>
+<div class="line">As I am now retired, any support helps me dedicate more time to maintaining and
+improving this work.</div>
+</div>
+<p><a class="reference external" href="https://www.paypal.com/donate/?hosted_button_id=FX8L7CJUGLW7S">Donate</a></p>
+</section>
+<section id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CHANGES.html">Changelog</a></li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">tox_backtick documentation</a></li>
+<li><a class="reference internal" href="#tox-backtick">tox-backtick</a></li>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#tox-backtocks">tox-backtocks</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#development">Development</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+<li><a class="reference internal" href="#sponsoring">Sponsoring</a></li>
+<li><a class="reference internal" href="#contents">Contents</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CHANGES.html"
+                          title="next chapter">Changelog</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CHANGES.html" title="Changelog"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">tox-backtick 2.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">tox_backtick documentation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright Steve Hespelt, Adam Karpierz, Damien Nadé.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>
