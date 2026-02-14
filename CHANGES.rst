@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.0 (2026-02-13)
+------------------
+- Added support for Python 3.15
+- Setup update (mainly dependencies).
+
 2.1.2 (2026-01-27)
 ------------------
 - Fixed compatibility bug for tox version 4.33.0+.
