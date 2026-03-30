@@ -1,5 +1,5 @@
-# Copyright (c) 2023 Adam Karpierz
-# SPDX-License-Identifier: LGPL-2.1-or-later
+# Copyright (c) 1994 Adam Karpierz
+# SPDX-License-Identifier: Zlib
 
 __all__ = ('top_dir', 'test_dir')
 
